@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-
     public function register(Request $request) {
-
         $res = $this->microgen->auth->register($request->all());
 
         if (array_key_exists('error', $res)) {
@@ -24,11 +22,13 @@ class UserController extends Controller
             'phoneNumber' => $res['user']['phoneNumber'],
         ));
 
+
+        $user["token"] = $res["token"];
+
         return $user;
     }
 
     public function login(Request $request) {
-
         $res = $this->microgen->auth->login($request->all());
 
         if (array_key_exists('error', $res)) {
@@ -36,6 +36,8 @@ class UserController extends Controller
         };
 
         $user = User::where('email', $request->email)->first();
+
+        $user["token"] = $res["token"];
 
         return $user;
     }
